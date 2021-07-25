@@ -4,13 +4,32 @@ class UsersController < ApplicationController
   # GET /users
   def index
     @users = User.all
-
-    render json: @users
+    if @users
+      render json: {
+        users: @users
+      }
+    else
+      render json: {
+        status: 500,
+        errors: ['Username or password not valid']
+      }
+    end
   end
 
   # GET /users/1
+
   def show
-    render json: @user
+    @user = User.find(params[:id])
+      if @user
+        render json: {
+        user: @user
+      }
+      else
+        render json: {
+           status: 500,
+           errors: ['Username or password not valid']
+         }
+      end
   end
 
   # POST /users
@@ -18,9 +37,15 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      session[:user_id] = @user.id
+      render json: {
+        status: :created, 
+        user: @user
+      }
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {
+        status: 500 
+      }
     end
   end
 
@@ -46,6 +71,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :username, :password_digest, :email)
+      params.require(:user).permit(:name, :username, :password, :password_confirmation, :email)
     end
 end
