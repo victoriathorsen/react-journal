@@ -1,9 +1,11 @@
 class PostsController < ApplicationController
+  include CurrentUserConcern
+  # before_action :set_user, only: [:create]
   before_action :set_post, only: [:show, :update, :destroy]
 
   # GET /posts
   def index
-    @posts = Post.all.reverse
+    @posts = Post.all
 
     render json: @posts
   end
@@ -16,6 +18,7 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
+    # @post.user_id = @current_user.id
 
     if @post.save
       render json: @post, status: :created, location: @post
@@ -46,6 +49,6 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:date, :title, :text, :tag_list)
+      params.require(:post).permit(:date, :title, :text, :tag_list, :user_id)
     end
 end

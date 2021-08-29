@@ -8,8 +8,5 @@ class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP } 
     validates :username, presence: true, uniqueness: true
 
-    # devise :database_authenticatable,
-    #        :jwt_authenticatable,
-    #        jwt_revocation_strategy: JWTBlacklist
-    # end
+
 end

@@ -4,32 +4,14 @@ class UsersController < ApplicationController
   # GET /users
   def index
     @users = User.all
-    if @users
-      render json: {
-        users: @users
-      }
-    else
-      render json: {
-        status: 500,
-        errors: ['Username or password not valid']
-      }
-    end
+
+    render json: @users
   end
 
   # GET /users/1
-
   def show
-    @user = User.find(params[:id])
-      if @user
-        render json: {
-        user: @user
-      }
-      else
-        render json: {
-           status: 500,
-           errors: ['Username or password not valid']
-         }
-      end
+    @posts = @user.posts
+    render json: @posts
   end
 
   # POST /users
@@ -37,15 +19,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      session[:user_id] = @user.id
-      render json: {
-        status: :created, 
-        user: @user
-      }
+      render json: @user, status: :created, location: @user, user: @user, logged_in: true
     else
-      render json: {
-        status: 500 
-      }
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 

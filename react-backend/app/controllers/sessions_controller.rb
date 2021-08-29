@@ -12,12 +12,12 @@ class SessionsController < ApplicationController
             }
         else
             render json: {
-                state: { status: 401 }
+                status: 401
             }
         end
     end
 
-    def logged_in
+    def login
         if @current_user
             render json: {
                 logged_in: true,

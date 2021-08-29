@@ -4,6 +4,10 @@ class TagsController < ApplicationController
       @tags = ActsAsTaggableOn::Tag.all
       render json: @tags
     end
+
+    def create
+      @tag = Tag.new(tag_params)
+    end
   
     # def destroy
     #   @tag = ActsAsTaggableOn::Tag.find(params[:id])
@@ -16,4 +20,9 @@ class TagsController < ApplicationController
     #   tag.update_attributes(name: params[:name])
     #   render json: {success: true}
     # end
+    private
+
+    def tag_params
+      params.require(:tag).permit(:name)
+    end
   end
